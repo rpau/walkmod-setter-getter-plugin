@@ -74,10 +74,11 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 									"set" + WordUtils.capitalize(fieldName),
 									parameter, "{ this." + fieldName + " = "
 											+ fieldName + "; }");
+							Parameter p = null;
 							ASTManager.addMethodDeclaration(coid,
 									ModifierSet.PUBLIC, fd.getType(), "get"
 											+ WordUtils.capitalize(fieldName),
-									parameter, "{return " + fieldName + ";}");
+									p, "{return " + fieldName + ";}");
 						} catch (ParseException e1) {
 							throw new WalkModException(e1);
 						}
