@@ -3,6 +3,9 @@
    "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-	<bean id="org.walkmod:walkmod-setter-getter-plugin:setter-getter-gen" 
-	class="org.walkmod.settergetter.visitors.SetterGetterGenerator"></bean>
+	<bean id="org.walkmod:walkmod-setter-getter-plugin:setter-getter-gen"
+		class="org.walkmod.settergetter.visitors.SetterGetterGenerator"></bean>
+
+	<alias name="org.walkmod:walkmod-setter-getter-plugin:setter-getter-gen"
+		alias="walkmod:commons:setter-getter-gen" />
 </beans>
