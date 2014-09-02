@@ -17,6 +17,7 @@ package org.walkmod.settergetter.visitors;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -46,6 +47,9 @@ import org.walkmod.walkers.VisitorContext;
 public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 
 	private CompilationUnit cu;
+
+	private static final List<String> BOOLEAN_TYPES = Arrays.asList(new String[]{ "Boolean",
+			"java.lang.Boolean", "boolean" });
 
 	public void visit(CompilationUnit cu, VisitorContext arg) {
 
@@ -82,6 +86,7 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 								fieldName);
 						try {
 							if (!Modifier.isFinal(fd.getModifiers())) {
+
 								addMethodDeclaration(
 										coid,
 										ModifierSet.PUBLIC,
@@ -89,12 +94,24 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 										"set" + WordUtils.capitalize(fieldName),
 										parameter, "{ this." + fieldName
 												+ " = " + fieldName + "; }");
+
 							}
-							Parameter p = null;
-							addMethodDeclaration(coid, ModifierSet.PUBLIC,
-									fd.getType(),
-									"get" + WordUtils.capitalize(fieldName), p,
-									"{return " + fieldName + ";}");
+							if (!isBoolean(fd.getType())) {
+								Parameter p = null;
+								addMethodDeclaration(
+										coid,
+										ModifierSet.PUBLIC,
+										fd.getType(),
+										"get" + WordUtils.capitalize(fieldName),
+										p, "{return " + fieldName + ";}");
+							} else {
+								Parameter p = null;
+								addMethodDeclaration(coid, ModifierSet.PUBLIC,
+										fd.getType(),
+										"is" + WordUtils.capitalize(fieldName),
+										p, "{return " + fieldName + ";}");
+							}
+
 						} catch (ParseException e1) {
 							throw new WalkModException(e1);
 						}
@@ -102,6 +119,14 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 				}
 			}
 		}
+	}
+
+	private boolean isBoolean(Type type) {
+		if (type != null) {
+			String s = type.toString();
+			return BOOLEAN_TYPES.contains(s);
+		}
+		return false;
 	}
 
 	private List<FieldDeclaration> getFields(TypeDeclaration td) {

@@ -32,4 +32,24 @@ public class SetterGetterGeneratorTest {
 		
 		Assert.assertEquals(true, ((MethodDeclaration)bd).getName().startsWith("get"));
 	}
+	
+	@Test
+	public void testBooleanGettersStartsWithIs() throws Exception{
+		SetterGetterGenerator ew = new SetterGetterGenerator();
+		VisitorContext ctx = new VisitorContext();
+		String code = "class Foo { private boolean valid = true; }"; 
+		CompilationUnit cu = ASTManager.parse(code);
+		ew.visit(cu, ctx);
+		Collection resultNodes = ctx.getResultNodes();
+		CompilationUnit generated = (CompilationUnit) resultNodes.iterator().next();
+		
+		TypeDeclaration type = generated.getTypes().get(0);
+		Assert.assertEquals(2, type.getMembers().size());
+		
+		BodyDeclaration bd = type.getMembers().get(1);
+		
+		Assert.assertEquals(MethodDeclaration.class, bd.getClass());
+		
+		Assert.assertEquals(true, ((MethodDeclaration)bd).getName().startsWith("is"));
+	}
 }
