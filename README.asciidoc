@@ -2,6 +2,8 @@ walkmod-setter-getter-plugin
 =============================
 Raquel Pau <raquelpau@gmail.com>
 
+image:https://travis-ci.org/rpau/walkmod-setter-getter-plugin.svg?branch=master["Build Status", link="https://travis-ci.org/rpau/walkmod-setter-getter-plugin"]
+
 This project is a http://www.walkmod.com[walkmod] plugin to generate a setter and a setter for each field declaration.
 
 == Usage
