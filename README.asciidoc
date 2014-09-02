@@ -2,7 +2,27 @@ walkmod-setter-getter-plugin
 =============================
 Raquel Pau <raquelpau@gmail.com>
 
-This project is a http://www.walkmod.com[walkmod] plugin to generate a setter and a setter for each field declaration. 
+This project is a http://www.walkmod.com[walkmod] plugin to generate a setter and a setter for each field declaration.
+
+== Usage
+
+You just need the following plugin declaration in your walkmod.xml:
+
+----
+<!DOCTYPE walkmod PUBLIC "-//WALKMOD//DTD"  "http://www.walkmod.com/dtd/walkmod-1.0.dtd" >
+<walkmod>
+	<plugins>
+		<plugin groupId="org.walkmod" artifactId="walkmod-imports-cleaner-plugin" version="2.0" />
+	</plugins>
+	....
+</walkmod>
+----	 
+
+Inside your transformation chain, you need to declare the following code transformation.
+
+----
+<transformation type="walkmod:commons:setter-getter-gen" isMergeable="true">
+----
 
 == Contributing
 
