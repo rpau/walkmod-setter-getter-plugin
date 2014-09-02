@@ -15,11 +15,13 @@
  along with Walkmod.  If not, see <http://www.gnu.org/licenses/>.*/
 package org.walkmod.settergetter.visitors;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.apache.commons.lang.WordUtils;
 import org.walkmod.exceptions.WalkModException;
 import org.walkmod.javalang.ASTManager;
@@ -72,17 +74,22 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 
 				arg.addResultNode(cu);
 				for (FieldDeclaration fd : fields) {
+
 					List<VariableDeclarator> variables = fd.getVariables();
 					for (VariableDeclarator vd : variables) {
 						String fieldName = vd.getId().getName();
-						Parameter parameter = createParameter(
-								fd.getType(), fieldName);
+						Parameter parameter = createParameter(fd.getType(),
+								fieldName);
 						try {
-							addMethodDeclaration(coid, ModifierSet.PUBLIC,
-									ASTManager.VOID_TYPE,
-									"set" + WordUtils.capitalize(fieldName),
-									parameter, "{ this." + fieldName + " = "
-											+ fieldName + "; }");
+							if (!Modifier.isFinal(fd.getModifiers())) {
+								addMethodDeclaration(
+										coid,
+										ModifierSet.PUBLIC,
+										ASTManager.VOID_TYPE,
+										"set" + WordUtils.capitalize(fieldName),
+										parameter, "{ this." + fieldName
+												+ " = " + fieldName + "; }");
+							}
 							Parameter p = null;
 							addMethodDeclaration(coid, ModifierSet.PUBLIC,
 									fd.getType(),
@@ -110,7 +117,6 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 		return fields;
 	}
 
-	
 	private static void addMember(TypeDeclaration type, BodyDeclaration decl) {
 		List<BodyDeclaration> members = type.getMembers();
 		if (members == null) {
@@ -152,15 +158,14 @@ public class SetterGetterGenerator extends VoidVisitorAdapter<VisitorContext> {
 		if (parameter != null) {
 			addParameter(mtd, parameter);
 		}
-		BlockStmt setterBlock = (BlockStmt) ASTManager.parse(BlockStmt.class, blockStmts);
+		BlockStmt setterBlock = (BlockStmt) ASTManager.parse(BlockStmt.class,
+				blockStmts);
 		mtd.setBody(setterBlock);
 		addMethodDeclaration(td, mtd);
 	}
-	
 
 	private Parameter createParameter(Type type, String name) {
 		return new Parameter(type, new VariableDeclaratorId(name));
 	}
-
 
 }
