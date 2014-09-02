@@ -1,0 +1,13 @@
+walkmod-setter-getter-plugin
+=============================
+Raquel Pau <raquelpau@gmail.com>
+
+This project is a http://www.walkmod.com[walkmod] plugin to generate a setter and a setter for each field declaration. 
+
+== Contributing
+
+If you want to hack on this, fork it, improve it and send me a pull request.
+
+To get started using it, just clone it and call mvn install.  
+
+
